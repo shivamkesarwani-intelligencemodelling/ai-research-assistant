@@ -27,18 +27,46 @@ import os
 #    print()
 
 
-from search import search_web
-from scraper import extract_text
+#from search import search_web
+#from scraper import extract_text
+
+#topic = input("Research topic: ")
+
+#results = search_web(topic)
+
+#if results:
+#    url = results[0]["url"]
+
+#    print(f"\nReading:\n{url}\n")
+
+#    text = extract_text(url)
+
+#    print(text[:1500])
+
+
+
+from research_agent import gather_research
+from report_writer import generate_report
 
 topic = input("Research topic: ")
 
-results = search_web(topic)
+print("\nSearching and collecting sources...\n")
 
-if results:
-    url = results[0]["url"]
+sources = gather_research(topic)
 
-    print(f"\nReading:\n{url}\n")
+print("\nGenerating report...\n")
 
-    text = extract_text(url)
+report = generate_report(topic, sources)
 
-    print(text[:1500])
+filename = (
+    topic.lower()
+    .replace(" ", "_")
+    .replace("/", "_")
+)
+
+path = f"reports/{filename}.md"
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(report)
+
+print(f"\nReport saved to {path}")
